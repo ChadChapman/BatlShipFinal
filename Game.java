@@ -50,26 +50,60 @@ public class Game {
   }
 
   private boolean fireShot() throws IOException {
-    System.out.println("Enter two numbers:");
-    Scanner input = new Scanner(System.in);
-    int shotRow = input.nextInt() - 1;
-    int shotCol = input.nextInt() - 1;
 
-    int shotResult = client.sendShot(shotRow, shotCol);
-    if(shotResult > 1) {
-      String sunkShipType = Board.ships[shotResult-2].getName();
-      System.out.println("HIT! Sunk enemy " + sunkShipType + "!");
-    } else if(shotResult == 1) {
-      System.out.println("Hit!");
-    } else if(shotResult == -1) {
-      System.out.println("HIT! You sunk the last enemy ship, you win!");
-      return true;
-    } else {
-      System.out.println("Miss...");
-    }
-    theirBoard.markShot(shotRow, shotCol, shotResult);
-    return false;
-  }
+		Scanner input = new Scanner(System.in);
+		boolean coordsValid = false;
+		// This While loop will Check for out of bounds numbers until valid ones are input
+		while(!coordsValid){
+			System.out.println("Enter two numbers:");
+		int	shotRow = input.nextInt()-1;
+		int	shotCol = input.nextInt()-1;
+			// this if statement checks row and column to make sure shots are inbounds
+			if(shotRow < 0 || shotRow > Board.BOARD_SIZE || shotCol <  0 || shotCol > Board.BOARD_SIZE){
+				System.out.println("Invalid Numbers PLease Try Again");
+				coordsValid = false;
+				//restarts the loop
+				continue;
+			}else
+				// Breaks the loop coords are good
+				coordsValid = true;
+
+			int shotResult = client.sendShot(shotRow, shotCol);
+		
+		if (shotResult > 1) {
+			String sunkShipType = Board.ships[shotResult - 2].getName();
+			System.out.println("HIT! Sunk enemy " + sunkShipType + "!");
+		} else if (shotResult == 1) {
+			System.out.println("Hit!");
+		} else if (shotResult == -1) {
+			System.out.println("HIT! You sunk the last enemy ship, you win!");
+			return true;
+		} else {
+			System.out.println("Miss...");
+		}
+		theirBoard.markShot(shotRow, shotCol, shotResult);
+		}
+		return false;
+	}
+	
+	private boolean receiveShot() throws IOException {
+		int incoming[] = client.receiveShot();
+		int shotResult = myBoard.getShot(incoming[0], incoming[1]);
+		if (shotResult > 1) {
+			String sunkShipType = Board.ships[shotResult - 2].getName();
+			System.out.println("The enemy sank your " + sunkShipType + "!");
+		} else if (shotResult == 1) {
+			System.out.println("Enemy hit at " + (incoming[0] + 1) + ", " + (incoming[1] + 1) + "!");
+		} else if (shotResult == -1) {
+			System.out.println("Enemy hit! Your last ship is sunk, you lose!");
+			client.sendShotResult(shotResult);
+			return true;
+		} else {
+			System.out.println("Enemy miss at " + (incoming[0] + 1) + ", " + (incoming[1] + 1) + ".");
+		}
+		client.sendShotResult(shotResult);
+		return false;
+	}
 
   private boolean receiveShot() throws IOException {
     int incoming[] = client.receiveShot();
