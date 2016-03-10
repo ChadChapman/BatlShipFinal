@@ -2,14 +2,14 @@
 public class BattleShip extends Ships {
 
 	@Override
-	// Name of the Boat
+	// Function returns the name of the ship.
 	public String getName() {
 		String shipName = "BattleShip";
 		return shipName;
 	}
 
 	@Override
-	//Size of the boat
+	// Function returns the size of the ship.
 	public int getPegCount() {
 		int shipSize = 4;
 		return shipSize;
