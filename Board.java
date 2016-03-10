@@ -1,14 +1,10 @@
 import java.util.Random;
-
+// This class will track the player's map and position of their ships.
 public class Board {
-
-  
+  // The map is a 10x10 grid.
   public static int BOARD_SIZE = 10;
-
   public int board[][] = new int[BOARD_SIZE][BOARD_SIZE];
-  
   public static Ships ships[] = { new PTboat(), new Destroyer(), new BattleShip(), new Carrier()};
-
   Random random = new Random();
 
   public Board() {
@@ -106,6 +102,9 @@ public class Board {
     return false;
   }
 
+  // Scans the map for filled spaces. Returns true
+  // if no filled spaces are found, false if ships
+  // are on the map.
   private boolean boardIsEmpty() {
     for(int row = 0; row < board.length; row++) {
       for(int col = 0; col < board[0].length; col++) {
@@ -117,9 +116,10 @@ public class Board {
     return true;
   }
 
+  // Function accepts a row and column as parameters.
+  // Will return an int based on the result of the shot.
   public int getShot(int row, int col) {
     int pegType = board[row][col];
-
     if(pegType == 0) {
       // Miss
       return 0;
