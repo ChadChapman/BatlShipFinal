@@ -1,11 +1,14 @@
+// Importing the necessary packages.
 import java.net.*;
 import java.io.*;
 import java.util.*;
 
 public class Server {
-  public static final int LISTENING_PORT = 32007;
+  public static final int LISTENING_PORT = 32007; //This is the port the client will connect to.
   Random random = new Random();
 
+  // Main method attempts to create an instance 
+  // of Server. Will restart if error is encountered.
   public static void main(String[] args) {
     while(true) {
       Server server = new Server();
@@ -16,7 +19,9 @@ public class Server {
       }
     }
   }
-
+  
+  // Function will accept connections from 2 clients and 
+  // start a new game.
   public void run() throws IOException { 
 	  ServerSocket listener; 
     Socket connection1 = null;
@@ -60,7 +65,10 @@ public class Server {
   private int pickFirstPlayer() {
     return random.nextInt(2);
   }
-
+  
+  // This function will randomly choose a player to go first, and 
+  // will relay shots back and forth between clients until the
+  // game is finished.
   private void playGame(Socket player1, Socket player2) throws IOException {
 
     // Assigns two input streams one for each player
@@ -114,19 +122,20 @@ public class Server {
       int shotCol = activeIn.readInt();
 
       System.out.println("Got shot: " + shotRow + ", " + shotCol + ". Sending to other.");
-      //
+      // Sends the shot to the receiving player
       otherOut.writeInt(shotRow);
       otherOut.writeInt(shotCol);
 
       System.out.println("Reading result from other.");
+      // Reads wheter shot is hit or miss.
       int result = otherIn.readInt();
 
       System.out.println("Got " + result + ". Sending to player.");
+      // Sends result to shooter.
       activeOut.writeInt(result);
       // Switches players to the next players turn after they Send a Shot
       firstPlayerTurn = !firstPlayerTurn;
     }
-    
   }
 }
 
