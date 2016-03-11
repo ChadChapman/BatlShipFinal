@@ -1,3 +1,8 @@
+/**
+*This Class is the Main after the server is started this class will start the clients to connect
+* to the Sever and start the game.
+* 
+*/
 // Imports the necessary packages.
 import java.io.IOException;
 import java.util.Random;
