@@ -100,27 +100,7 @@ public class Game {
 		}
 		return false;
 	}
-	
 
-	private boolean receiveShot() throws IOException {
-		int incoming[] = client.receiveShot();
-		int shotResult = myBoard.getShot(incoming[0], incoming[1]);
-		if (shotResult > 1) {
-			String sunkShipType = Board.ships[shotResult - 2].getName();
-			System.out.println("The enemy sank your " + sunkShipType + "!");
-		} else if (shotResult == 1) {
-			System.out.println("Enemy hit at " + (incoming[0] + 1) + ", " + (incoming[1] + 1) + "!");
-		} else if (shotResult == -1) {
-			System.out.println("Enemy hit! Your last ship is sunk, you lose!");
-			client.sendShotResult(shotResult);
-			return true;
-		} else {
-			System.out.println("Enemy miss at " + (incoming[0] + 1) + ", " + (incoming[1] + 1) + ".");
-		}
-		client.sendShotResult(shotResult);
-		return false;
-	}
- 
   // Function will receive a shot from the client, check
   // if the shot hit a ship. It sends the result of the shot
   // to the client and return it to the caller.
