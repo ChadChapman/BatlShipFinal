@@ -30,6 +30,8 @@ public class Board {
     return sb.toString();
   }
 
+  //This Method is the random Ship placement algorithm
+  //While the boolean finished = false the method will continually try to populate the four ships.
   public void populateBoard() {
     // Randomly place four ships
     for(int shipPegs = 2; shipPegs < 6; shipPegs++) {
@@ -39,6 +41,7 @@ public class Board {
      int shipPegSize = currentShip.getPegCount();
     	// Loop until we've successfully placed this ship
       boolean finished = false;
+     //This loop will continue until all four ships are placed
       while(!finished) {
         // Pick a starting point on the board
         int startRow = random.nextInt(BOARD_SIZE);
@@ -48,13 +51,13 @@ public class Board {
         int direction = random.nextInt(4);
         int stepRow = 0, stepCol = 0;
         switch(direction) {
-        //North 
+        //Up 
         case 0: stepRow =  0; stepCol = -1; break; 
-        //East  
+        //Right  
         case 1: stepRow =  1; stepCol =  0; break; 
-        //South  
+        //Down  
         case 2: stepRow =  0; stepCol =  1; break; 
-        //West  
+        //Left  
         case 3: stepRow = -1; stepCol =  0; break; 
         }
 
@@ -62,6 +65,8 @@ public class Board {
         int currentRow = startRow;
         int currentCol = startCol;
         boolean abortPlacement = false;
+        //Checks to make sure the peg being placed is correctly on the board
+        //or overlaps with another ship
         for(int peg = 0; peg < shipPegSize; peg++) {
           if(  currentRow < 0 || currentRow > board.length - 1
             || currentCol < 0 || currentCol > board[0].length - 1
@@ -70,6 +75,7 @@ public class Board {
             abortPlacement = true;
             break;
           }
+          
           currentRow += stepRow;
           currentCol += stepCol;
         }
@@ -79,6 +85,7 @@ public class Board {
         // If we reach this point, we know the path is good, so place pegs as we go
         currentRow = startRow;
         currentCol = startCol;
+        //Places the current ships pegs on the board
         for(int peg = 0; peg < shipPegSize; peg++) {
           board[currentRow][currentCol] = shipPegSize;
           currentRow += stepRow;
